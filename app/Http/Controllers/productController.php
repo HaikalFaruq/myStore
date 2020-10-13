@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Brian2694\Toastr\Facades\Toastr;
 
 class ProductController extends Controller
 {
@@ -85,16 +86,27 @@ class ProductController extends Controller
      */
     public function update(Request $request)
     {
-      Product::where('id', $request->id)->update([
-          'id' => $request->id,
-          'product_title' => $request->product_title,
-          'product_slug'    => $request->product_slug,
-          'product_image' => $request->product_image
-      ]);
+      $data = [
+        'id' => $request->id,
+        'product_title' => $request->product_title,
+        'product_slug' => \Str::slug($request->product_title),
+        'product_image' => $request->product_image,
+      ];
       // $product->update($request->all());
 
-      return redirect('/product');
-    }
+      if (Product::where('product_slug', \Str::slug($request->product_title))->exists()) {
+        $ubah = [
+          'id' => $request->id,
+          'product_image' => $request->product_image,
+        ];
+        Product::where('id', $request->id)->update($ubah);
+        Toastr::warning('Data ' . $request['product_title'] . ' not changed, but another data is still changed','Warning');
+        return redirect('product');
+      } else {
+        Product::where('id', $request->id)->update($data);
+        Toastr::success('Data ' . $request['product_title'] . ' successfully changed','Success');
+        return redirect('product');
+      }    }
 
     /**
      * Remove the specified resource from storage.
