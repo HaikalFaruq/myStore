@@ -18,5 +18,11 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('product/{product:product_slug}', $url. "\productController@showProduct");
-Route::resource('product', $url . '\ProductController');
+Route::get('product', $url . '\productController@index');
+Route::get('product/create', $url . '\productController@create');
+Route::post('product/store', $url . '\productController@store');
+Route::get('product/edit/{product_slug}', $url . '\productController@edit');
+Route::patch('product/update', $url . '\productController@update');
+Route::get('product/detail/{product_slug}', $url. "\productController@showProduct");
+Route::delete('product/delete/{product:product_slug}', $url. '\productController@destroy');
+// Route::resource('product', $url . '\ProductController');

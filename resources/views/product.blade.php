@@ -7,6 +7,8 @@
     </div>
     @endif
 
+    <a href="product/create" class="btn btn-success mb-3 float-right">CREATE</a>
+
     <table class="table table-hover table-bordered">
       <tr class="bg-light">
         <th class="text-md-center">NO</th>
@@ -22,13 +24,13 @@
           <td class="text-md-center">{{ $pr->product_slug }}</td> 
           <td class="text-md-center">{{ $pr->product_image }}</td>
           <td class="text-md-center">
-            <form action="{{ route('product.destroy', $pr->id) }}" method="post">
+            <form action="/product/delete/{{ $pr->product_slug }}" method="post">
               @csrf
-              @method('DELETE')
-              <a href="{{ route('product.show', $pr->id) }}" class="btn btn-dark">
+              @method('delete')
+              <a href="{{'product/detail/' . $pr->product_slug}}" class="btn btn-dark">
               DETAIL
               </a>
-              <a href="{{ route('product.edit', $pr->id) }}" class="btn btn-warning">
+              <a href="{{'product/edit/' . $pr->product_slug}}" class="btn btn-warning">
               EDIT
               </a>
               <button type="submit" class="btn btn-danger">
@@ -42,4 +44,5 @@
         </tr>
       @endforelse
     </table>
+    {{ $product->links() }} 
 @endsection

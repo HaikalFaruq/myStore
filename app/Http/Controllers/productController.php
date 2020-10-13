@@ -14,15 +14,15 @@ class ProductController extends Controller
      */
     public function index()
     {
-      $product = Product::all();
+      $product = Product::paginate(5);
       return view('product', compact('product'));
     }
 
     public function showProduct($slug)
     {
-      $product = Product::where('product_slug', $slug)
+      $data = Product::where('product_slug', $slug)
               ->firstOrFail();
-      return view('product', compact('product'));
+      return view('product.show', compact('data'));
     }
 
     /**
@@ -32,7 +32,21 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('product.create');
+    }
+
+    public function store(Request $request, Product $product)
+    {
+      $product = new Product;
+      $product->product_title = $request->product_title;
+      $product->product_slug = \Str::slug($request->product_title);
+      $product->product_image = $request->product_image;
+      if(Product::where('product_slug', $product->product_slug)->exists()){
+        return redirect('/product/create')->with('error', 'Product udah ada boy!');
+      } else {
+        $product->save();
+        return redirect('product');
+      }
     }
 
     /**
@@ -41,21 +55,14 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
-
+       
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
-    {
-      return view("product.show", compact("product"));
-    }
+  
 
     /**
      * Show the form for editing the specified resource.
@@ -63,9 +70,10 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit($slug)
     {
-      return view('product.edit', compact('product'));
+      $data = Product::where('product_slug', $slug)->first();
+      return view('product.edit', compact('data'));
     }
 
     /**
@@ -75,14 +83,15 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request)
     {
-      $request->validate([
-          'product_title' => 'required',
-          'product_slug'    => 'required',
-          'product_image' => 'required',
+      Product::where('id', $request->id)->update([
+          'id' => $request->id,
+          'product_title' => $request->product_title,
+          'product_slug'    => $request->product_slug,
+          'product_image' => $request->product_image
       ]);
-      $product->update($request->all());
+      // $product->update($request->all());
 
       return redirect('/product');
     }
@@ -96,7 +105,6 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
       $product->delete();
-
       return redirect('/product');
     }
 }

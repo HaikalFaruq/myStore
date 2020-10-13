@@ -12,11 +12,11 @@
         </div>
     @endif
     <div class="row align-items-center justify-content-center h-100">
-        <div class="col-12">
+        <div class="col-6">
             <div class="card mt-md-3">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col text-left">Update Product</div>
+                        <div class="col text-left">Create Product</div>
                         <div class="col text-right">
                         <a href="/product" class="btn btn-xs btn-dark">
                             <i class="fa fa-backspace"></i>
@@ -25,30 +25,25 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="/product/update" method="post">
+            <form action="/product/store" method="post">
                     @csrf
-                    @method('patch')
-                    <div class="form-group">
-                        <label for="#">ID</label>
-                        <input type="text" class="form-control" value="{{$data->id}}" name="id" readonly>
-                      </div>
                     <div class="form-group">
                         <label for="#">Product</label>
                         <input type="text" name="product_title" class="form-control"
-                            placeholder="Nama Product" value="{{ $data->product_title }}">
+                            placeholder="Nama Product" value="">
                     </div>
-                    <div class="form-group">
-                        <label for="#">Slug</label>
-                        <input type="text" name="product_slug" class="form-control"
-                            placeholder="Nama Merk" value="{{ $data->product_slug }}">
-                    </div>
+                    @if ($message = Session::get('error'))
+                        <div class="alert alert-danger">
+                            {{ $message }}
+                        </div>
+                    @endif
                     <div class="form-group">
                         <label for="#">Image</label>
                         <input type="text" name="product_image" class="form-control"
-                            placeholder="Gambar Product" value="{{ $data->product_image }}">
+                            placeholder="Gambar Product" value="">
                     </div>
                     <button type="submit" class="btn btn-primary">Save</button>
-                </form>                    
+                </form>
             </div>
             </div>
         </div>

@@ -28,6 +28,13 @@
   <link href="{{ url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700') }}" rel="stylesheet">
   <link rel="stylesheet" href="{{ url('http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css') }}"> 
 </head>
+
+<style>
+  svg.w-5.h-5 {
+    width: 30px;
+  }
+</style>
+
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
